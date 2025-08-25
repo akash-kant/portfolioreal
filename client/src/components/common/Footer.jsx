@@ -65,12 +65,12 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">YN</span>
+                <span className="text-white font-bold">AK</span>
               </div>
-              <span className="text-xl font-bold">Your Name</span>
+              <span className="text-xl font-bold">Akash Kant</span>
             </div>
             <p className="text-secondary-400 mb-6 max-w-md">
-              Full-stack developer, content creator, and career mentor. Helping developers build better projects and grow their careers.
+              Full‑stack developer specializing in MERN and Java/Spring Boot, building scalable web apps, ML-driven solutions, and community platforms.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
@@ -130,7 +130,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-secondary-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-secondary-400 text-sm">
-            © {currentYear} Akash kant. All rights reserved.
+            © {currentYear} Akash Kant. [cite_start]All rights reserved. [cite: 68]
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-secondary-400 hover:text-white text-sm transition-colors">

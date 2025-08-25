@@ -41,14 +41,14 @@ const BookingPage = () => {
   const { data: service, isLoading: isLoadingService } = useQuery(['service', serviceId], () =>
     api.get(`/services/${serviceId}`).then(res => res.data.data)
   );
-  
+
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
   const { data: availability, isLoading: isLoadingAvailability } = useQuery(
     ['availability', serviceId, formattedDate],
     () => api.get(`/bookings/availability/${serviceId}?date=${formattedDate}`).then(res => res.data.data),
     { enabled: !!service }
   );
-  
+
   const handleSelectSlot = ({ start }) => {
     setSelectedDate(start);
     setSelectedSlot(null); // Reset selected time slot when a new date is picked
@@ -65,7 +65,6 @@ const BookingPage = () => {
     }
 
     const toastId = toast.loading('Initializing payment...');
-
     try {
       // 1. Create booking and Razorpay order on the backend
       const bookingResponse = await api.post('/bookings', {
@@ -73,17 +72,16 @@ const BookingPage = () => {
         scheduledDateTime: selectedSlot.datetime,
         customerInfo,
       });
-      
       const { booking, razorpayOrder } = bookingResponse.data.data;
       
       toast.dismiss(toastId);
 
       // 2. Open Razorpay checkout
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Add this to your .env file
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
-        name: 'Akash Kant Portfolio',
+        name: 'Akash Kant',
         description: `Booking for ${service.title}`,
         order_id: razorpayOrder.id,
         handler: async function (response) {
@@ -110,7 +108,6 @@ const BookingPage = () => {
           color: '#3b82f6',
         },
       };
-
       const rzp = new window.Razorpay(options);
       rzp.open();
 
@@ -118,7 +115,6 @@ const BookingPage = () => {
       toast.error('Could not initiate booking. The slot might have been taken.', { id: toastId });
     }
   };
-
 
   if (isLoadingService) return <p className="text-center py-10">Loading Service...</p>;
 
@@ -132,13 +128,13 @@ const BookingPage = () => {
           <h2 className="text-xl font-semibold mb-4">1. Select a Date</h2>
           <div style={{ height: 500 }}>
              <Calendar
-                localizer={localizer}
-                events={[]}
-                startAccessor="start"
-                endAccessor="end"
-                selectable
-                onSelectSlot={handleSelectSlot}
-                defaultDate={new Date()}
+               localizer={localizer}
+               events={[]}
+               startAccessor="start"
+               endAccessor="end"
+               selectable
+               onSelectSlot={handleSelectSlot}
+               defaultDate={new Date()}
              />
           </div>
         </div>
@@ -170,16 +166,16 @@ const BookingPage = () => {
             <div className="mt-8 p-4 bg-primary-50 rounded-lg">
                <h3 className="text-xl font-semibold mb-4">3. Your Information</h3>
                {!user && (
-                 <>
-                   <div className="mb-4">
-                     <label className="block text-sm font-medium mb-1">Name</label>
-                     <input type="text" className="input" value={customerInfo.name} onChange={e => setCustomerInfo({...customerInfo, name: e.target.value})} />
-                   </div>
-                   <div className="mb-4">
-                      <label className="block text-sm font-medium mb-1">Email</label>
-                     <input type="email" className="input" value={customerInfo.email} onChange={e => setCustomerInfo({...customerInfo, email: e.target.value})} />
-                   </div>
-                 </>
+                  <>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium mb-1">Name</label>
+                      <input type="text" className="input" value={customerInfo.name} onChange={e => setCustomerInfo({...customerInfo, name: e.target.value})} />
+                    </div>
+                    <div className="mb-4">
+                       <label className="block text-sm font-medium mb-1">Email</label>
+                      <input type="email" className="input" value={customerInfo.email} onChange={e => setCustomerInfo({...customerInfo, email: e.target.value})} />
+                    </div>
+                  </>
                )}
                <div className="font-bold text-lg">
                   Total: ₹{service.price}

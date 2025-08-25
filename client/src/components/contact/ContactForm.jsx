@@ -7,6 +7,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
 import { useMutation } from 'react-query'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
+import { SOCIAL_LINKS } from '../../utils/constants'
 
 const schema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
@@ -197,7 +198,7 @@ const ContactForm = () => {
           </p>
           <p className="mb-2">
             <strong>Preferred Contact:</strong> For urgent matters, you can also reach me on{' '}
-            <a href="https://linkedin.com/in/yourusername" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">
+            <a href={SOCIAL_LINKS.LINKEDIN} className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">
               LinkedIn
             </a>.
           </p>
