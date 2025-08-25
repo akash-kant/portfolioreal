@@ -9,8 +9,9 @@ import {
   BriefcaseIcon
 } from '@heroicons/react/24/outline'
 import { useQuery } from 'react-query'
-import api from '../services/api'
-import ProjectCard from '../components/projects/ProjectCard'
+import api from '../services/api'; // Correctly import the api service
+// Corrected Imports:
+import ProjectCard from '../components/projects/ProjectCard' 
 import BlogCard from '../components/blog/BlogCard'
 
 const Home = () => {
@@ -19,18 +20,18 @@ const Home = () => {
   const [projectsRef, projectsInView] = useInView({ triggerOnce: true, threshold: 0.3 })
 
   // Fetch featured projects
-  const { data: projects } = useQuery(
-    'featuredProjects',
-    () => api.get('/projects?featured=true&limit=3').then(res => res.data.data),
-    { refetchOnWindowFocus: false }
-  )
+const { data: projects } = useQuery(
+  'featuredProjects',
+  () => api.get('/projects?featured=true&limit=3').then(res => res.data.data),
+  { refetchOnWindowFocus: false }
+)
 
-  // Fetch latest blog posts
-  const { data: blogs } = useQuery(
-    'latestBlogs',
-    () => api.get('/blog?limit=3').then(res => res.data.data),
-    { refetchOnWindowFocus: false }
-  )
+// Corrected useQuery for latest blog posts
+const { data: blogs } = useQuery(
+  'latestBlogs',
+  () => api.get('/blog?limit=3').then(res => res.data.data),
+  { refetchOnWindowFocus: false }
+)
 
   const skills = [
     { name: 'Frontend', icon: '⚛️', description: 'React, Vue, Angular' },

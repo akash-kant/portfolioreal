@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { 
   DocumentIcon, 
   StarIcon, 
-  DownloadIcon,
+  ArrowDownTrayIcon as DownloadIcon, // This line is corrected
   CurrencyRupeeIcon,
   TagIcon
 } from '@heroicons/react/24/outline'

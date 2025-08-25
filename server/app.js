@@ -7,6 +7,8 @@ const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
+const xss = require('xss'); // xss should be required, not the other way around.
+
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -92,6 +94,32 @@ app.get('/api/health', (req, res) => {
 
 // Global error handler
 app.use(errorHandler);
+
+const sanitizeRequestBody = (data) => {
+  if (typeof data === 'string') {
+    return xss(data);
+  }
+  if (Array.isArray(data)) {
+    return data.map(item => sanitizeRequestBody(item));
+  }
+  if (typeof data === 'object' && data !== null) {
+    const sanitizedData = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        sanitizedData[key] = sanitizeRequestBody(data[key]);
+      }
+    }
+    return sanitizedData;
+  }
+  return data;
+};
+
+app.use((req, res, next) => {
+  if (req.body) {
+    req.body = sanitizeRequestBody(req.body);
+  }
+  next();
+});
 
 // Handle undefined routes
 app.all('*', (req, res) => {
