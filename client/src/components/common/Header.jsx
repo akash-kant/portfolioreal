@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useAuth } from '../../context/AuthContext'
-import { ROUTES, SOCIAL_LINKS } from '../../utils/constants'
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../../context/AuthContext';
+import { ROUTES, SOCIAL_LINKS } from '../../utils/constants';
+import { SITE } from '../../utils/constants';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const location = useLocation()
-  const { user, logout } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const { user, logout } = useAuth();
 
   const navigation = [
     { name: 'Home', href: ROUTES.HOME },
@@ -17,24 +18,20 @@ const Header = () => {
     { name: 'Social', href: ROUTES.SOCIAL },
     { name: 'Resources', href: ROUTES.RESOURCES },
     { name: 'Services', href: ROUTES.SERVICES },
-    { name: 'Contact', href: ROUTES.CONTACT }
-  ]
+    { name: 'Contact', href: ROUTES.CONTACT },
+  ];
 
-  const isActive = (path) => location.pathname === path
+  const isActive = (path) => location.pathname === path;
 
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-secondary-200 sticky top-0 z-50">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          {/* Logo */}
-          <Link
-            to={ROUTES.HOME}
-            className="flex items-center space-x-2 group"
-          >
+          <Link to={ROUTES.HOME} className="flex items-center space-x-2 group">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="text-white font-bold text-lg">YN</span>
+              <span className="text-white font-bold text-lg">{SITE.BRAND_INITIALS}</span>
             </div>
-            <span className="text-xl font-bold text-secondary-900">Your Name</span>
+            <span className="text-xl font-bold text-secondary-900">{SITE.BRAND}</span>
           </Link>
 
           {/* Desktop Navigation */}

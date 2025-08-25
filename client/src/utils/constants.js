@@ -10,7 +10,6 @@ export const ROUTES = {
   REGISTER: '/register',
   DASHBOARD: '/dashboard'
 }
-
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
@@ -27,24 +26,25 @@ export const API_ENDPOINTS = {
   CONTACT: '/contact',
   SOCIAL: '/social'
 }
-
-export const STORAGE_KEYS = {
-  TOKEN: 'token',
-  THEME: 'theme',
-  USER_PREFERENCES: 'userPreferences'
-}
+export const STORAGE_KEYS = { TOKEN: 'token', THEME: 'theme', USER_PREFERENCES: 'userPreferences' };
 
 export const CATEGORIES = {
   BLOG: ['Technical', 'Career', 'Tutorials', 'Tips', 'Industry News'],
   PROJECTS: ['Web Development', 'Mobile App', 'AI/ML', 'Data Science', 'DevOps', 'Other'],
   RESOURCES: ['Resume Templates', 'Interview Prep', 'Coding Sheets', 'Study Notes', 'Cheat Sheets', 'Guides', 'Other'],
-  SERVICES: ['Resume Review', 'Mock Interview', 'Career Consultation', 'Code Review', 'Mentorship', 'Other']
-}
+  SERVICES: ['Resume Review', 'Mock Interview', 'Career Consultation', 'Code Review', 'Mentorship', 'Other'],
+};
 
 export const SOCIAL_LINKS = {
-  GITHUB: 'https://github.com/yourusername',
-  LINKEDIN: 'https://linkedin.com/in/yourusername',
-  TWITTER: 'https://twitter.com/yourusername',
-  YOUTUBE: 'https://youtube.com/@yourchannel',
-  INSTAGRAM: 'https://instagram.com/yourusername'
-}
+  GITHUB: 'https://github.com/akashkant',
+  LINKEDIN: 'https://linkedin.com/in/akash-kant',
+  TWITTER: 'https://twitter.com/akashkant',
+  YOUTUBE: 'https://youtube.com/@akashkant',
+  INSTAGRAM: 'https://instagram.com/akashkant',
+};
+
+export const SITE = {
+  BRAND: 'Akash Kant',
+  BRAND_INITIALS: 'AK',
+  YEAR: new Date().getFullYear(),
+};

@@ -2,17 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
-const xss = require('xss'); // xss should be required, not the other way around.
-
+const xss = require('xss');
 
 const errorHandler = require('./middleware/errorHandler');
 
-// Import routes
+// Routes
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
 const projectRoutes = require('./routes/projects');
@@ -25,51 +23,64 @@ const contactRoutes = require('./routes/contact');
 
 const app = express();
 
-// Global Middleware
-app.use(helmet()); // Set security headers
+// Security headers
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
 
-// CORS configuration
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
-}));
+// CORS
+const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:3000';
+app.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  })
+);
 
-// Body parser middleware
+// Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Data sanitization against NoSQL query injection
+// NoSQL injection sanitize
 app.use(mongoSanitize());
 
-// Data sanitization against XSS
-app.use((req, res, next) => {
-  if (req.body) {
-    Object.keys(req.body).forEach(key => {
-      if (typeof req.body[key] === 'string') {
-        req.body[key] = xss(req.body[key]);
-      }
-    });
+// XSS sanitize basic strings
+const sanitizeRequestBody = (data) => {
+  if (typeof data === 'string') return xss(data);
+  if (Array.isArray(data)) return data.map((i) => sanitizeRequestBody(i));
+  if (data && typeof data === 'object') {
+    const out = {};
+    for (const k of Object.keys(data)) out[k] = sanitizeRequestBody(data[k]);
+    return out;
   }
+  return data;
+};
+app.use((req, res, next) => {
+  if (req.body) req.body = sanitizeRequestBody(req.body);
   next();
 });
 
-// Prevent parameter pollution
+// Prevent HTTP param pollution
 app.use(hpp());
 
-// Development logging
+// Logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Rate limiting
+// Rate limiting on API
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  windowMs: 10 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api/', limiter);
 
-// Static files
+// Static
 app.use('/uploads', express.static('uploads'));
 
 // Routes
@@ -83,50 +94,24 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/social', socialRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Health check endpoint
+// Health
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Server is healthy',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
-// Global error handler
-app.use(errorHandler);
-
-const sanitizeRequestBody = (data) => {
-  if (typeof data === 'string') {
-    return xss(data);
-  }
-  if (Array.isArray(data)) {
-    return data.map(item => sanitizeRequestBody(item));
-  }
-  if (typeof data === 'object' && data !== null) {
-    const sanitizedData = {};
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
-        sanitizedData[key] = sanitizeRequestBody(data[key]);
-      }
-    }
-    return sanitizedData;
-  }
-  return data;
-};
-
-app.use((req, res, next) => {
-  if (req.body) {
-    req.body = sanitizeRequestBody(req.body);
-  }
-  next();
-});
-
-// Handle undefined routes
+// 404
 app.all('*', (req, res) => {
   res.status(404).json({
     success: false,
-    message: `Route ${req.originalUrl} not found`
+    message: `Route ${req.originalUrl} not found`,
   });
 });
+
+// Error handler
+app.use(errorHandler);
 
 module.exports = app;

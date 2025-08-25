@@ -130,7 +130,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-secondary-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-secondary-400 text-sm">
-            © {currentYear} Your Name. All rights reserved.
+            © {currentYear} Akash kant. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-secondary-400 hover:text-white text-sm transition-colors">
