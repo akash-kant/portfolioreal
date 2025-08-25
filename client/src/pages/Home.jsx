@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useInView } from 'react-intersection-observer'
-import { 
-  ArrowDownIcon, 
-  CodeBracketIcon, 
+import {
+  ArrowDownIcon,
+  CodeBracketIcon,
   ChatBubbleLeftRightIcon,
   AcademicCapIcon,
   BriefcaseIcon
@@ -11,7 +11,7 @@ import {
 import { useQuery } from 'react-query'
 import api from '../services/api'; // Correctly import the api service
 // Corrected Imports:
-import ProjectCard from '../components/projects/ProjectCard' 
+import ProjectCard from '../components/projects/ProjectCard'
 import BlogCard from '../components/blog/BlogCard'
 
 const Home = () => {
@@ -20,18 +20,18 @@ const Home = () => {
   const [projectsRef, projectsInView] = useInView({ triggerOnce: true, threshold: 0.3 })
 
   // Fetch featured projects
-const { data: projects } = useQuery(
-  'featuredProjects',
-  () => api.get('/projects?featured=true&limit=3').then(res => res.data.data),
-  { refetchOnWindowFocus: false }
-)
+  // Corrected useQuery hooks
+  const { data: projects } = useQuery(
+    'featuredProjects',
+    () => api.get('/projects?featured=true&limit=3').then(res => res.data.data),
+    { refetchOnWindowFocus: false }
+  );
 
-// Corrected useQuery for latest blog posts
-const { data: blogs } = useQuery(
-  'latestBlogs',
-  () => api.get('/blog?limit=3').then(res => res.data.data),
-  { refetchOnWindowFocus: false }
-)
+  const { data: blogs } = useQuery(
+    'latestBlogs',
+    () => api.get('/blog?limit=3').then(res => res.data.data),
+    { refetchOnWindowFocus: false }
+  );
 
   const skills = [
     { name: 'Frontend', icon: '⚛️', description: 'React, Vue, Angular' },
@@ -57,8 +57,8 @@ const { data: blogs } = useQuery(
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-72 h-72 bg-primary-500 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
-          <div className="absolute top-10 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-10 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{ animationDelay: '4s' }}></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
